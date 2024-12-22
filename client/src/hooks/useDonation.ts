@@ -1,11 +1,21 @@
 import { useEffect, useState } from "react";
 import Web3 from "web3";
+import { parseEther } from "viem";
 import DonationPlatformABI from "@/Donations.json";
+import type { Address } from "@/types";
+import { writeContract, sendTransaction, readContract } from "@wagmi/core";
+import { wagmiConfig } from "@/wagmiConfigs";
 
-const SMART_WALLET_ADDRESS = "0x9ff27C8408a3F9f987f9A372665F3e73a4d2bDfb";
+interface TransactionParams {
+  to: Address;
+  value: string;
+}
+
+const SMART_WALLET_ADDRESS = "0x59861EC7670bE025Bd239A5Ae1B8Af32E98dF1F3";
 
 const useDonation = () => {
-  const [account, setAccount] = useState("");
+  const { ethereum } = window;
+
   const [contract, setContract] = useState<any>(null);
   const [donors, setDonors] = useState<
     { donorAddress: string; amount: string }[]
@@ -14,40 +24,76 @@ const useDonation = () => {
 
   useEffect(() => {
     const loadBlockchainData = async () => {
-      const web3 = new Web3(process.env.NEXT_PUBLIC_RPC_URL);
-      const donationContract = new web3.eth.Contract(
-        DonationPlatformABI.abi as any,
-        SMART_WALLET_ADDRESS
-      );
-      setContract(donationContract);
+      try {
+        const web3 = new Web3(ethereum);
+        const donationContract = new web3.eth.Contract(
+          DonationPlatformABI.abi as any,
+          SMART_WALLET_ADDRESS
+        );
+        setContract(donationContract);
 
-      const donations = (await donationContract.methods.getDonors().call()) as {
-        donorAddress: string;
-        amount: string;
-      }[];
+        const donations = (await donationContract.methods
+          .getDonors()
+          .call()) as {
+          donorAddress: string;
+          amount: string;
+        }[];
+        const totalDonations = (await donationContract.methods
+          .getTotalDonations()
+          .call()) as string;
 
-      const totalDonations = (await donationContract.methods
-        .getTotalDonations()
-        .call()) as string;
-
-      setDonors(donations);
-      setTotalDonations(Web3.utils.fromWei(totalDonations, "ether"));
+        setDonors(donations);
+        setTotalDonations(Web3.utils.fromWei(totalDonations, "ether"));
+      } catch (error) {
+        console.error("Error loading blockchain data:", error);
+      }
     };
 
     loadBlockchainData();
   }, []);
 
-  const donate = async (amount: string) => {
-    await contract.methods.donate().send({
-      from: account,
-      value: Web3.utils.toWei(amount, "ether"),
-    });
-    window.location.reload();
+  const donate = async (address: Address, amount: string) => {
+    try {
+      if (!contract) {
+        throw new Error("Contract not loaded. Please try again later.");
+      }
+
+      if (!address) {
+        throw new Error("No wallet connected. Please connect your wallet.");
+      }
+
+      const amountInWei = parseEther(amount);
+
+      const txHash = await sendTransaction(wagmiConfig, {
+        to: SMART_WALLET_ADDRESS,
+        value: amountInWei,
+        data: "0x",
+      });
+
+      console.log("Transaction hash:", txHash);
+
+      await contract.methods.donate().send({
+        from: address,
+        value: amountInWei,
+      });
+
+      const donations = (await contract.methods.getDonors().call()) as {
+        donorAddress: string;
+        amount: string;
+      }[];
+
+      const totalDonations = (await contract.methods
+        .getTotalDonations()
+        .call()) as string;
+
+      setDonors(donations);
+      setTotalDonations(Web3.utils.fromWei(totalDonations, "ether"));
+    } catch (error) {
+      console.error("Error donating:", error);
+    }
   };
 
   return {
-    account,
-    setAccount,
     donors,
     totalDonations,
     donate,

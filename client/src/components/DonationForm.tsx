@@ -1,16 +1,14 @@
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import ConnectWallet from "./ConnectWallet";
+import type { Address } from "@/types";
 
 interface DonationFormProps {
   totalDonations: string;
-  donate: (amount: string) => void;
+  donate: (address: Address, amount: string) => void;
 }
 
-const DonationForm = ({
-  totalDonations,
-  donate,
-}: DonationFormProps) => {
+const DonationForm = ({ totalDonations, donate }: DonationFormProps) => {
   const { isConnected, address } = useAccount();
 
   const [donationAmount, setDonationAmount] = useState("");
@@ -29,7 +27,7 @@ const DonationForm = ({
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              donate(donationAmount);
+              donate(address, donationAmount);
             }}
             className="flex justify-center gap-4"
           >
