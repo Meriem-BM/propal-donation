@@ -4,6 +4,11 @@
   "main": "index.js",
   "author": "Meriem Barhoumi",
   "license": "MIT",
+  "scripts": {
+    "node": "hardhat node",
+    "compile": "hardhat compile",
+    "test": "hardhat test"
+  },
   "dependencies": {
     "dotenv": "^16.4.7",
     "hardhat": "^2.22.17"
