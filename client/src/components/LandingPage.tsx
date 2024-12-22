@@ -7,13 +7,12 @@ import Header from "@/components/Sections/Header";
 import DonationForm from "@/components/DonationForm";
 
 const App = () => {
-  const { account, totalDonations, donors, donate } = useDonation();
+  const { totalDonations, donors, donate } = useDonation();
 
   return (
     <div className="min-h-screen bg-black text-gray-300 font-sans">
       <Header />
       <DonationForm
-        account={account}
         totalDonations={totalDonations}
         donate={donate}
       />
