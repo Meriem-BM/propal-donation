@@ -2,22 +2,17 @@
 
 import Web3 from "web3";
 import useDonation from "@/hooks/useDonation";
-import FeaturesSection from "@/components/Sections/FeaturesSection";
-import Header from "@/components/Sections/Header";
 import DonationForm from "@/components/DonationForm";
 
-const App = () => {
+const LandingPage = ({
+  children,
+}: Readonly<{ children?: React.ReactNode }>) => {
   const { totalDonations, donors, donate } = useDonation();
 
   return (
-    <div className="min-h-screen bg-black text-gray-300 font-sans">
-      <Header />
-      <DonationForm
-        totalDonations={totalDonations}
-        donate={donate}
-      />
-      <FeaturesSection />
-
+    <>
+      <DonationForm totalDonations={totalDonations} donate={donate} />
+      {children}
       <section className="p-12 max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold mb-6 text-white text-center">
           Recent Donations
@@ -40,8 +35,8 @@ const App = () => {
           ))}
         </div>
       </section>
-    </div>
+    </>
   );
 };
 
-export default App;
+export default LandingPage;

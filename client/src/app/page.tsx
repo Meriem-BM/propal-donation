@@ -1,9 +1,16 @@
-"use client";
-
 import LandingPage from "@/components/LandingPage";
+import Header from "@/components/Sections/Header";
+import FeaturesSection from "@/components/Sections/FeaturesSection";
 
 const App = () => {
-  return <LandingPage />;
+  return (
+    <div className="min-h-screen bg-black text-gray-300 font-sans">
+      <Header />
+      <LandingPage>
+        <FeaturesSection />
+      </LandingPage>
+    </div>
+  );
 };
 
 export default App;
