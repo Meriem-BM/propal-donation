@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "hardhat/console.sol";
+
 contract Donations {
-    address public admin;
-    uint public totalDonations;
+    address private admin;
+    uint private totalDonations;
 
     struct Donor {
         address donorAddress;
@@ -49,13 +51,19 @@ contract Donations {
     }
 
     function withdraw(uint _amount) public onlyAdmin {
+        require(_amount > 0, "Withdrawal amount must be greater than zero");
         require(_amount <= address(this).balance, "Insufficient balance");
+
         payable(admin).transfer(_amount);
+
         emit FundsWithdrawn(admin, _amount);
     }
 
     function getDonors() public view returns (Donor[] memory) {
         return donors;
     }
-}
 
+    function owner() public view returns (address) {
+        return admin;
+    }
+}
