@@ -8,39 +8,32 @@ import { wagmiConfig } from "@/wagmiConfigs";
 
 const SMART_WALLET_ADDRESS = "0x59861EC7670bE025Bd239A5Ae1B8Af32E98dF1F3";
 
-interface Donor {
-  donorAddress: string;
-  amount: string;
-}
-
-interface IDonationContractMethods {
-  getDonors: () => Promise<Donor[]>;
-  getTotalDonations: () => Promise<string>;
-  donate: () => {
-    send: (transaction: { from: Address; value: string }) => Promise<void>;
+type DonationContract = typeof DonationPlatformABI & {
+  methods: {
+    donate: () => {
+      send: (options: { from: Address; value: bigint }) => Promise<void>;
+    };
+    getDonors: () => {
+      call: () => Promise<{ donorAddress: string; amount: string }[]>;
+    };
+    getTotalDonations: () => {
+      call: () => Promise<string>;
+    };
   };
-}
-
-type DonationContract = {
-  methods: IDonationContractMethods;
 };
 
 const useDonation = () => {
-  const { ethereum } = window as Window & { ethereum: unknown };
+  const { ethereum } = window;
 
   const [contract, setContract] = useState<DonationContract | null>(null);
-  const [donors, setDonors] = useState<Donor[]>([]);
-  const [totalDonations, setTotalDonations] = useState<string>("");
+  const [donors, setDonors] = useState<
+    { donorAddress: string; amount: string }[]
+  >([]);
+  const [totalDonations, setTotalDonations] = useState("");
 
   useEffect(() => {
     const loadBlockchainData = async () => {
       try {
-        if (!ethereum) {
-          throw new Error(
-            "Ethereum object not found. Please install MetaMask."
-          );
-        }
-
         const web3 = new Web3(ethereum);
         const donationContract = new web3.eth.Contract(
           DonationPlatformABI.abi,
@@ -49,9 +42,15 @@ const useDonation = () => {
 
         setContract(donationContract);
 
-        const donations = await donationContract.methods.getDonors();
-        const totalDonations =
-          await donationContract.methods.getTotalDonations();
+        const donations = (await donationContract.methods
+          .getDonors()
+          .call()) as {
+          donorAddress: string;
+          amount: string;
+        }[];
+        const totalDonations = (await donationContract.methods
+          .getTotalDonations()
+          .call()) as string;
 
         setDonors(donations);
         setTotalDonations(Web3.utils.fromWei(totalDonations, "ether"));
@@ -85,11 +84,17 @@ const useDonation = () => {
 
       await contract.methods.donate().send({
         from: address,
-        value: amountInWei.toString(),
+        value: amountInWei,
       });
 
-      const donations = await contract.methods.getDonors();
-      const totalDonations = await contract.methods.getTotalDonations();
+      const donations = (await contract.methods.getDonors().call()) as {
+        donorAddress: string;
+        amount: string;
+      }[];
+
+      const totalDonations = (await contract.methods
+        .getTotalDonations()
+        .call()) as string;
 
       setDonors(donations);
       setTotalDonations(Web3.utils.fromWei(totalDonations, "ether"));
