@@ -1,0 +1,30 @@
+<svg id='Alert_Triangle_24' width='24' height='24' viewBox='0 0 24 24'
+    xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+    <rect width='24' height='24' stroke='none' fill='#000000' opacity='0' />
+
+
+    <g transform="matrix(0.83 0 0 0.83 12 12)">
+        <g style="">
+            <g transform="matrix(1 0 0 1 0 0.74)">
+                <path
+                    style="stroke: rgb(255,255,255); stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"
+                    transform=" translate(-12, -12.74)"
+                    d="M 22.553 22.581 C 22.687376852868887 22.76773782837271 22.696080356676514 23.0170212831046 22.575054399081058 23.212676266993093 C 22.454028441485605 23.408331250881584 22.22709012711125 23.511854162599338 22 23.474999999999998 L 2 23.474999999999998 C 1.7729098728887507 23.511854162599338 1.5459715585143952 23.408331250881584 1.4249456009189416 23.212676266993093 C 1.303919643323488 23.0170212831046 1.3126231471311152 22.76773782837271 1.447 22.581 L 11.553 2.37 C 11.799000000000001 1.8780000000000001 12.201 1.8780000000000001 12.447000000000001 2.37 Z"
+                    stroke-linecap="round" />
+            </g>
+            <g transform="matrix(1 0 0 1 0 1.48)">
+                <path
+                    style="stroke: rgb(255,255,255); stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"
+                    transform=" translate(-12, -13.48)" d="M 12 16.979 L 12 9.979"
+                    stroke-linecap="round" />
+            </g>
+            <g transform="matrix(1 0 0 1 0 7.23)">
+                <path
+                    style="stroke: rgb(255,255,255); stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"
+                    transform=" translate(-12, -19.23)"
+                    d="M 11.991 18.979 C 11.925038759094475 18.980296299480894 11.862362521190985 19.00803306416987 11.817046674402572 19.055981366788313 C 11.77173082761416 19.103929669406757 11.747573581404227 19.16807065761788 11.75 19.233999999999998 C 11.755357407270278 19.37052612441894 11.867369480241587 19.478569265670796 12.004 19.479 L 12.009 19.479 C 12.074961240905525 19.477703700519104 12.137637478809015 19.44996693583013 12.182953325597428 19.402018633211686 C 12.22826917238584 19.354070330593242 12.252426418595773 19.28992934238212 12.25 19.224 C 12.244725906656123 19.089001780475506 12.135077210959205 18.981546058692526 12 18.979 L 11.995 18.979"
+                    stroke-linecap="round" />
+            </g>
+        </g>
+    </g>
+</svg>

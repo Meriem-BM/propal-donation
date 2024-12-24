@@ -4,7 +4,7 @@ import ConnectWallet from "./ConnectWallet";
 import type { Address } from "@/types";
 import Image from "next/image";
 import Spinner from "./Spinner";
-
+import { copyToClipboard } from "@/utils/helpers";
 interface DonationFormProps {
   totalDonations: string;
   fetching: boolean;
@@ -38,7 +38,7 @@ const DonationForm = ({
               {address.substring(0, 6)}...{address.slice(-4)}
               <button
                 className="cursor-pointer hover:opacity-70"
-                onClick={() => navigator.clipboard.writeText(address)}
+                onClick={() => copyToClipboard(address)}
               >
                 <Image
                   src="/icons/copy.svg"
