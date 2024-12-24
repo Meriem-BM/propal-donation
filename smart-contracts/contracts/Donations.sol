@@ -10,6 +10,8 @@ contract Donations {
     struct Donor {
         address donorAddress;
         uint amount;
+        string keyword;
+        uint256 timestamp;
     }
 
     Donor[] public donors;
@@ -27,11 +29,12 @@ contract Donations {
         _;
     }
 
-    function donate() public payable {
+    function donate(string memory _keyword) public payable {
         require(msg.value > 0, "Donation amount must be greater than 0");
 
         if (donorAmounts[msg.sender] == 0) {
-            donors.push(Donor(msg.sender, msg.value));
+            uint256 timestamp = block.timestamp;
+            donors.push(Donor(msg.sender, msg.value, _keyword, timestamp));
         } else {
             for (uint i = 0; i < donors.length; i++) {
                 if (donors[i].donorAddress == msg.sender) {
