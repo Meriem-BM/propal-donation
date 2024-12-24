@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`overflow-y-scroll bg-gray-1100 bg-grid pb-36`}
       >
         <WagmiWrapper>{children}</WagmiWrapper>
       </body>

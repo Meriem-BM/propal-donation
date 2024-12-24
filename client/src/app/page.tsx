@@ -4,7 +4,7 @@ import FeaturesSection from "@/components/Sections/FeaturesSection";
 
 const App = () => {
   return (
-    <div className="min-h-screen bg-black text-gray-300 font-sans">
+    <div className="min-h-screen text-gray-300 font-sans">
       <Header />
       <LandingPage>
         <FeaturesSection />

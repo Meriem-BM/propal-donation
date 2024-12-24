@@ -22,7 +22,7 @@ const features = [
 
 const FeaturesSection = () => {
   return (
-    <section className="bg-gray-800 text-gray-300 py-20">
+    <section className="text-gray-300 py-20 mx-8">
       <div className="container mx-auto">
         <h2 className="text-4xl font-bold text-center">Features</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">

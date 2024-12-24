@@ -5,12 +5,13 @@ import DonationPlatformABI from "@/Donations.json";
 import type { Address } from "@/types";
 import { sendTransaction } from "@wagmi/core";
 import { wagmiConfig } from "@/wagmiConfigs";
+import type { IDonartiondData } from "../types/index";
 
-const SMART_WALLET_ADDRESS = "0x59861EC7670bE025Bd239A5Ae1B8Af32E98dF1F3";
+const SMART_WALLET_ADDRESS = "0x864f73103b059D095E0b6EcB483Fc04c3475006F";
 
 type DonationContract = typeof DonationPlatformABI & {
   methods: {
-    donate: () => {
+    donate: (keyword: string) => {
       send: (options: { from: Address; value: bigint }) => Promise<void>;
     };
     getDonors: () => {
@@ -26,14 +27,22 @@ const useDonation = () => {
   const { ethereum } = window;
 
   const [contract, setContract] = useState<DonationContract | null>(null);
-  const [donors, setDonors] = useState<
-    { donorAddress: string; amount: string }[]
-  >([]);
+  const [donors, setDonors] = useState<IDonartiondData[]>([]);
   const [totalDonations, setTotalDonations] = useState("");
+  const [fetching, setFetching] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const loadBlockchainData = async () => {
       try {
+        if (!ethereum) {
+          throw new Error(
+            "No ethereum object found. Please connect your wallet."
+          );
+        }
+
+        setFetching(true);
+
         const web3 = new Web3(ethereum);
         const donationContract = new web3.eth.Contract(
           DonationPlatformABI.abi,
@@ -44,10 +53,7 @@ const useDonation = () => {
 
         const donations = (await donationContract.methods
           .getDonors()
-          .call()) as {
-          donorAddress: string;
-          amount: string;
-        }[];
+          .call()) as IDonartiondData[];
         const totalDonations = (await donationContract.methods
           .getTotalDonations()
           .call()) as string;
@@ -56,14 +62,22 @@ const useDonation = () => {
         setTotalDonations(Web3.utils.fromWei(totalDonations, "ether"));
       } catch (error) {
         console.error("Error loading blockchain data:", error);
+      } finally {
+        setFetching(false);
       }
     };
 
     loadBlockchainData();
   }, []);
 
-  const donate = async (address: Address, amount: string) => {
+  const donate = async (address: Address, amount: string, keyword: string) => {
     try {
+      if (submitting) {
+        return;
+      }
+
+      setSubmitting(true);
+
       if (!contract) {
         throw new Error("Contract not loaded. Please try again later.");
       }
@@ -82,15 +96,14 @@ const useDonation = () => {
 
       console.log("Transaction hash:", txHash);
 
-      await contract.methods.donate().send({
+      await contract.methods.donate(keyword).send({
         from: address,
         value: amountInWei,
       });
 
-      const donations = (await contract.methods.getDonors().call()) as {
-        donorAddress: string;
-        amount: string;
-      }[];
+      const donations = (await contract.methods
+        .getDonors()
+        .call()) as IDonartiondData[];
 
       const totalDonations = (await contract.methods
         .getTotalDonations()
@@ -100,12 +113,16 @@ const useDonation = () => {
       setTotalDonations(Web3.utils.fromWei(totalDonations, "ether"));
     } catch (error) {
       console.error("Error donating:", error);
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return {
     donors,
     totalDonations,
+    fetching,
+    submitting,
     donate,
   };
 };

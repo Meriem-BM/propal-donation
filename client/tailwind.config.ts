@@ -9,8 +9,13 @@ export default {
   theme: {
     extend: {
       colors: {
+        primary: "#2AAA8A",
+        secondary: "#00A36C",
         background: "var(--background)",
         foreground: "var(--foreground)",
+      },
+      backgroundImage: {
+        "grid": "url('/images/grid.svg')",
       },
     },
   },

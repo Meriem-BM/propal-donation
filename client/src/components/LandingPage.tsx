@@ -1,13 +1,13 @@
 "use client";
 
-import Web3 from "web3";
 import useDonation from "@/hooks/useDonation";
 import DonationForm from "@/components/DonationForm";
+import TransactionCard from "@/components/TxCard";
 
 const LandingPage = ({
   children,
 }: Readonly<{ children?: React.ReactNode }>) => {
-  const { totalDonations, donors, donate } = useDonation();
+  const { totalDonations, donors, fetching, donate } = useDonation();
 
   return (
     <>
@@ -18,21 +18,15 @@ const LandingPage = ({
           Recent Donations
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {donors.map((donor, index) => (
-            <div
-              key={index}
-              className="bg-gray-800 rounded-lg shadow-md p-6 border border-gray-700"
-            >
-              <p className="text-lg font-semibold text-white">
-                {donor.donorAddress.substring(0, 6)}...
-                {donor.donorAddress.slice(-4)}
-              </p>
-              <p className="text-gray-400">
-                <span className="font-bold text-gray-300">Amount:</span>{" "}
-                {Web3.utils.fromWei(donor.amount, "ether")} ETH
-              </p>
-            </div>
-          ))}
+          {donors?.length === 0 ? (
+            <p className="text-white text-center">No donations yet</p>
+          ) : fetching ? (
+            <p className="text-white text-center">Loading...</p>
+          ) : (
+            donors.map((donor, index) => (
+              <TransactionCard key={index} donor={donor} index={index} />
+            ))
+          )}
         </div>
       </section>
     </>

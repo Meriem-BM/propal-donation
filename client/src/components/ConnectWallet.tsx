@@ -7,7 +7,7 @@ const ConnectWallet = () => {
 		<div className="flex justify-center items-center gap-4">
 			<button
 				onClick={() => open()}
-				className='w-fit rounded bg-blue-500 px-4 py-2 transition hover:bg-blue-600'
+				className='w-fit rounded bg-primary px-4 py-2 transition hover:bg-secondary text-white'
 			>
 				Connect Wallet
 			</button>

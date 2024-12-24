@@ -1,6 +1,6 @@
 const Header = () => {
   return (
-    <header className="bg-gradient-to-br from-gray-800 to-black p-12 text-center">
+    <header className="bg-black p-12 text-center w-2/3 mx-auto my-12 rounded-xl border-gray-800 border">
       <h1 className="text-5xl font-bold text-white">
         Decentralized Donation Platform
       </h1>
