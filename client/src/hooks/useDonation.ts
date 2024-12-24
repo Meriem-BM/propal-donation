@@ -24,15 +24,21 @@ type DonationContract = typeof DonationPlatformABI & {
 };
 
 const useDonation = () => {
-  const { ethereum } = window;
-
   const [contract, setContract] = useState<DonationContract | null>(null);
   const [donors, setDonors] = useState<IDonartiondData[]>([]);
   const [totalDonations, setTotalDonations] = useState("");
-  const [fetching, setFetching] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    setFetching(true);
+
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const { ethereum } = window;
+
     const loadBlockchainData = async () => {
       try {
         if (!ethereum) {
@@ -40,8 +46,6 @@ const useDonation = () => {
             "No ethereum object found. Please connect your wallet."
           );
         }
-
-        setFetching(true);
 
         const web3 = new Web3(ethereum);
         const donationContract = new web3.eth.Contract(
@@ -68,7 +72,7 @@ const useDonation = () => {
     };
 
     loadBlockchainData();
-  }, [ethereum]);
+  }, []);
 
   const donate = async (address: Address, amount: string, keyword: string) => {
     try {

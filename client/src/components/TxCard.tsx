@@ -2,6 +2,7 @@ import { Web3 } from "web3";
 import type { IDonartiondData } from "../types/index";
 import useFetch from "@/hooks/useFetch";
 import Image from "next/image";
+import Spinner from "./Spinner";
 
 const TransactionCard = ({
   donor,
@@ -41,7 +42,9 @@ const TransactionCard = ({
       </div>
       <div className="flex justify-center mt-4">
         {loading ? (
-          <p>Loading...</p>
+          <div className="flex w-48 h-48 justify-center items-center">
+            <Spinner size={35} />
+          </div>
         ) : (
           <Image
             src={gifUrl}
@@ -49,7 +52,8 @@ const TransactionCard = ({
             width={300}
             height={300}
             onError={(e) => {
-              e.currentTarget.src ="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGJrdjh3bWNveWtsbzVmMGlrdWo4cjV2dWtkcnRpaXY1cTlyMXlrcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3zhxq2ttgN6rEw8SDx/giphy.webp";
+              e.currentTarget.src =
+                "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGJrdjh3bWNveWtsbzVmMGlrdWo4cjV2dWtkcnRpaXY1cTlyMXlrcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3zhxq2ttgN6rEw8SDx/giphy.webp";
             }}
           />
         )}

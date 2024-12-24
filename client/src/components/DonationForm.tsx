@@ -3,13 +3,21 @@ import { useAccount } from "wagmi";
 import ConnectWallet from "./ConnectWallet";
 import type { Address } from "@/types";
 import Image from "next/image";
+import Spinner from "./Spinner";
 
 interface DonationFormProps {
   totalDonations: string;
+  fetching: boolean;
+  submitting: boolean;
   donate: (address: Address, amount: string, keyword: string) => void;
 }
 
-const DonationForm = ({ totalDonations, donate }: DonationFormProps) => {
+const DonationForm = ({
+  totalDonations,
+  fetching,
+  submitting,
+  donate,
+}: DonationFormProps) => {
   const { isConnected, address } = useAccount();
 
   const [donationAmount, setDonationAmount] = useState("");
@@ -18,23 +26,35 @@ const DonationForm = ({ totalDonations, donate }: DonationFormProps) => {
   return (
     <section className="sm:p-12 p-2 text-center sm:mx-8 mx-4 my-4 rounded-lg shadow-lg">
       <h2 className="text-3xl font-bold mb-16 text-white">Make a Donation</h2>
-      {!isConnected || !address ? (
+      {!isConnected ? (
         <ConnectWallet />
       ) : (
         <>
           <p>Your are connected with address:</p>
-          <p className="flex text-lg font-semibold text-white mb-6 justify-center gap-2 items-center">
-            {address.substring(0, 6)}...{address.slice(-4)}
-            <button
-              className="cursor-pointer hover:opacity-70"
-              onClick={() => navigator.clipboard.writeText(address)}
-            >
-              <Image src="/icons/copy.svg" alt="copy" width={20} height={20} />
-            </button>
-          </p>
+          {fetching ? (
+            <Spinner size={16} />
+          ) : address ? (
+            <p className="flex text-lg font-semibold text-white mb-6 justify-center gap-2 items-center">
+              {address.substring(0, 6)}...{address.slice(-4)}
+              <button
+                className="cursor-pointer hover:opacity-70"
+                onClick={() => navigator.clipboard.writeText(address)}
+              >
+                <Image
+                  src="/icons/copy.svg"
+                  alt="copy"
+                  width={20}
+                  height={20}
+                />
+              </button>
+            </p>
+          ) : (
+            "No address found"
+          )}
           <p className="flex text-lg mb-6 text-gray-400 justify-center gap-2 items-center">
-            <span className="text-gray-300">
-              Total Donations: {totalDonations}
+            <span className="flex text-gray-300 justify-center gap-2 items-center">
+              Total Donations:{" "}
+              {fetching ? <Spinner size={16} /> : totalDonations}{" "}
             </span>{" "}
             <Image
               src="/icons/tokens/ethereum-eth.svg"
@@ -70,7 +90,7 @@ const DonationForm = ({ totalDonations, donate }: DonationFormProps) => {
               className="bg-primary text-white w-full py-2 rounded-md mt-6 disabled:bg-gray-600 disabled:cursor-not-allowed"
               disabled={!donationAmount || !keyword}
             >
-              Donate
+              {submitting ? "Processing..." : "Donate"}
             </button>
           </form>
         </>
