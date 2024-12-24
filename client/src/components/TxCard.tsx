@@ -14,7 +14,7 @@ const TransactionCard = ({
       key={index}
       className="bg-gray-800 rounded-lg shadow-md p-6 border border-gray-700"
     >
-      <div className="flex gap-4 text-lg font-semibold text-white mb-6">
+      <div className="flex gap-2 text-lg font-semibold text-white mb-6">
         <p>
           {donor.donorAddress.substring(0, 6)}...
           {donor.donorAddress.slice(-4)}
@@ -43,7 +43,15 @@ const TransactionCard = ({
         {loading ? (
           <p>Loading...</p>
         ) : (
-          <Image src={gifUrl} alt="gif" width={300} height={300} />
+          <Image
+            src={gifUrl}
+            alt="gif"
+            width={300}
+            height={300}
+            onError={(e) => {
+              e.currentTarget.src ="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGJrdjh3bWNveWtsbzVmMGlrdWo4cjV2dWtkcnRpaXY1cTlyMXlrcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3zhxq2ttgN6rEw8SDx/giphy.webp";
+            }}
+          />
         )}
       </div>
       <p className="flex justify-end text-gray-400 text-sm mt-4">

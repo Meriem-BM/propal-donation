@@ -16,7 +16,7 @@ const DonationForm = ({ totalDonations, donate }: DonationFormProps) => {
   const [keyword, setKeyword] = useState("");
 
   return (
-    <section className="p-12 text-center mx-8 my-4 rounded-lg shadow-lg">
+    <section className="sm:p-12 p-2 text-center sm:mx-8 mx-4 my-4 rounded-lg shadow-lg">
       <h2 className="text-3xl font-bold mb-16 text-white">Make a Donation</h2>
       {!isConnected || !address ? (
         <ConnectWallet />
@@ -49,7 +49,7 @@ const DonationForm = ({ totalDonations, donate }: DonationFormProps) => {
               e.preventDefault();
               donate(address, donationAmount, keyword);
             }}
-            className="bg-black w-1/4 mx-auto p-10 rounded-lg shadow-lg flex flex-col gap-4 items-center"
+            className="bg-black md:w-1/2 lg:w-1/3 xl:w-1/4 w-full mx-auto p-10 rounded-lg shadow-lg flex flex-col gap-4 items-center"
           >
             <input
               type="text"
@@ -58,7 +58,7 @@ const DonationForm = ({ totalDonations, donate }: DonationFormProps) => {
               placeholder="Amount in ETH"
               className="w-full p-2 border rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary"
             />
-             <input
+            <input
               type="text"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
