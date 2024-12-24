@@ -3,6 +3,10 @@ import type { IDonartiondData } from "../types/index";
 import useFetch from "@/hooks/useFetch";
 import Image from "next/image";
 import Spinner from "./Spinner";
+import { copyToClipboard } from "@/utils/helpers";
+
+const fallbackGifUrl =
+  "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGJrdjh3bWNveWtsbzVmMGlrdWo4cjV2dWtkcnRpaXY1cTlyMXlrcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3zhxq2ttgN6rEw8SDx/giphy.webp";
 
 const TransactionCard = ({
   donor,
@@ -22,7 +26,7 @@ const TransactionCard = ({
         </p>
         <button
           className="cursor-pointer hover:opacity-70"
-          onClick={() => navigator.clipboard.writeText(donor.donorAddress)}
+          onClick={() => copyToClipboard(donor.donorAddress)}
         >
           <Image src="/icons/copy.svg" alt="copy" width={20} height={20} />
         </button>
@@ -47,13 +51,12 @@ const TransactionCard = ({
           </div>
         ) : (
           <Image
-            src={gifUrl}
+            src={gifUrl || fallbackGifUrl}
             alt="gif"
             width={300}
             height={300}
             onError={(e) => {
-              e.currentTarget.src =
-                "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGJrdjh3bWNveWtsbzVmMGlrdWo4cjV2dWtkcnRpaXY1cTlyMXlrcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3zhxq2ttgN6rEw8SDx/giphy.webp";
+              e.currentTarget.src = fallbackGifUrl;
             }}
           />
         )}
