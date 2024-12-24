@@ -68,7 +68,7 @@ const useDonation = () => {
     };
 
     loadBlockchainData();
-  }, []);
+  }, [ethereum]);
 
   const donate = async (address: Address, amount: string, keyword: string) => {
     try {
