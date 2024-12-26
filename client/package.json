@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "export": "next build && next export",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.62.10",
     "@web3modal/wagmi": "^5.1.11",
     "ethers": "^6.13.4",
     "next": "15.1.2",
